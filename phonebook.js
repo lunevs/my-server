@@ -43,6 +43,12 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
+    if (persons.findIndex(p => p.name === body.name) > -1) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+
     const newPerson = {
         id: Math.max(...persons.map(p => p.id)) + 1,
         name: body.name,
