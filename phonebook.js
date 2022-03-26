@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-//app.use(express.json);
+app.use(express.json());
 
 let persons = [
     {
@@ -33,6 +33,25 @@ app.get('/', (request, response) => {
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 });
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (!body.name || !body.number) {
+        return response.status(400).json({
+            error: "content missing"
+        })
+    }
+
+    const newPerson = {
+        id: Math.max(...persons.map(p => p.id)) + 1,
+        name: body.name,
+        number: body.number //Math.floor(Math.random() * 1000000)
+    }
+    persons = persons.concat(newPerson);
+    response.json(persons)
+});
+
 app.get('/api/persons/:id', (request, response) => {
     const p_id = Number(request.params.id)
     const person = persons.find(p => p.id === p_id)
@@ -45,7 +64,8 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response) => {
     const p_id = Number(request.params.id)
     persons = persons.filter(p => p.id !== p_id)
-    response.json(persons)
+    console.log(persons)
+    response.status(204).end();
 });
 
 app.get('/info', (request, response) => {
