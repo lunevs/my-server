@@ -61,7 +61,7 @@ app.post('/api/persons', (request, response) => {
         number: body.number //Math.floor(Math.random() * 1000000)
     }
     persons = persons.concat(newPerson);
-    response.json(persons)
+    response.json(newPerson);
 });
 
 app.get('/api/persons/:id', (request, response) => {
@@ -76,7 +76,6 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response) => {
     const p_id = Number(request.params.id)
     persons = persons.filter(p => p.id !== p_id)
-    console.log(persons)
     response.status(204).end();
 });
 
