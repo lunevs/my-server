@@ -7,7 +7,8 @@
     "start": "node index.js",
     "dev_n": "nodemon index.js",
     "dev_p": "nodemon phonebook.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,8 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.12.0",
+    "eslint-plugin-react": "^7.29.4",
     "nodemon": "^2.0.15"
   }
 }
