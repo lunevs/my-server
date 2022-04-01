@@ -26,7 +26,7 @@ app.get('/api/persons', (request, response) => {
     Person
         .find({})
         .then(result => {
-            console.log("find persons:", result)
+            console.log('find persons:', result)
             response.json(result)
         })
 });
@@ -47,7 +47,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.delete('/api/persons/:id', (request, response, next) => {
     Person
         .findByIdAndRemove(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).end();
         })
         .catch(error => next(error))
@@ -70,7 +70,7 @@ app.post('/api/persons', (request, response, next) => {
 
     if (!body.name || !body.number) {
         return response.status(400).json({
-            error: "content missing"
+            error: 'content missing'
         })
     }
 
@@ -100,7 +100,7 @@ const errorHandler = (error, request, response, next) => {
 
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
-    } else if (error.name === "ValidationError") {
+    } else if (error.name === 'ValidationError') {
         return response.status(400).json({ error: error.message })
     }
 
