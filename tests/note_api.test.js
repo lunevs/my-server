@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const helper = require('./test_helper')
+const helper = require('./note_test_helper')
 const app = require('../app')
 
 const api = supertest(app)
@@ -9,10 +9,11 @@ const Note = require('../models/note')
 
 beforeEach(async () => {
     await Note.deleteMany({})
-    let noteObject = new Note(helper.initialNotes[0])
-    await noteObject.save()
-    noteObject = new Note(helper.initialNotes[1])
-    await noteObject.save()
+
+    const noteObj = helper.initialNotes
+        .map(note => new Note(note))
+    const promiseArray = noteObj.map(note => note.save())
+    await Promise.all(promiseArray)
 })
 
 test('notes are returned as json', async () => {
@@ -74,7 +75,6 @@ test('note without content is not added', async () => {
 
 test('a specific note can be viewed', async () => {
     const notesAtStart = await helper.notesInDb()
-
     const noteToView = notesAtStart[0]
 
     const resultNote = await api
@@ -83,7 +83,6 @@ test('a specific note can be viewed', async () => {
         .expect('Content-Type', /application\/json/)
 
     const processedNoteToView = JSON.parse(JSON.stringify(noteToView))
-
     expect(resultNote.body).toEqual(processedNoteToView)
 })
 
