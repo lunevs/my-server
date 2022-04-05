@@ -1,0 +1,4 @@
+use NewDBname
+
+db.createUser({user:"hello_admin",pwd:"hello123",roles:[{role:"readWrite",db:"ichtusDB"}]});
+
