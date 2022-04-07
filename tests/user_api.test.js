@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
-const helper = require('users_test_helper')
+const helper = require('./users_test_helper')
 const app = require('../app')
 const supertest = require("supertest");
 const api = supertest(app)
@@ -21,17 +21,18 @@ describe('when there is initially one user in db',() => {
 
         const newUser = {
             name: 'test User',
-            username: 'admin',
+            username: 'admin222',
             password: 'asd123'
         }
 
-        api
+        await api
             .post('/api/users')
             .send(newUser)
             .expect(201)
             .expect('Content-Type', /application\/json/)
 
         const usersAtEnd = await helper.usersInDb()
+
         expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
         const usernames = usersAtEnd.map(user => user.username)
@@ -48,7 +49,7 @@ describe('when there is initially one user in db',() => {
             password: 'qwe123'
         }
 
-        api
+        const result = await api
             .post('/api/users')
             .send(newUser)
             .expect(400)
