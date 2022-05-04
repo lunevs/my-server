@@ -3,14 +3,6 @@ const Note = require('../models/note')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-const getTokenFrom = request => {
-    const authorization = request.get('authorization')
-    if (authorization && authorization.toLowerCase().startsWith('bearer')) {
-        return authorization.substring(7)
-    }
-    return null
-}
-
 notesRouter.get('/', async (request, response) => {
     const notes = await Note
         .find({}).populate('user', {name: 1, username: 1})
@@ -28,8 +20,8 @@ notesRouter.get('/:id', async (request, response) => {
 
 notesRouter.post('/', async (request, response) => {
     const body = request.body
-    const token = getTokenFrom(request)
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
     if (!decodedToken.id) {
         return response.status(401).json({error: 'token missing or invalid'})
     }

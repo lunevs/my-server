@@ -1,4 +1,4 @@
-POST http://localhost:3001/api/login
+POST http://localhost/api/login
 Content-Type: application/json
 
 {
@@ -7,7 +7,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3001/api/users
+POST http://localhost/api/users
 Content-Type: application/json
 
 {
@@ -17,12 +17,25 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3001/api/notes/
+POST http://localhost/api/notes/
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI2MjRlYjU4MTIzYWQxMDQzYThjMjdmMjciLCJpYXQiOjE2NDkzMjY2MTF9.xD_XfZBEBi0StiSX9Mo_X7xK-i3hsPtbs3nwf-UB6hk
 
 {
-  "content": "fgd fd fg df gdfg "
+  "content": "fgd 234 fd fg df gdfg "
 }
 
 ###
+
+GET http://localhost/api/blogs
+Accept: application/json
+
+###
+POST http://localhost/api/blogs/
+Content-Type: application/json
+
+{
+  "title": "fgd 234 fd fg df gdfg ",
+  "author": "fgd 234 fd fg df gdfg ",
+  "url": "http://localhost"
+}

@@ -4,6 +4,11 @@ const userSchema = new mongoose.Schema({
     username: String,
     name: String,
     passwordHash: String,
+    surname: String,
+    phone: String,
+    sex: String,
+    churchStatus: String,
+    status: String,
     notes: [
         {
             type: mongoose.Schema.Types.ObjectId,
