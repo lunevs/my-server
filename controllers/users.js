@@ -17,7 +17,6 @@ usersRouter.get('/:id', async (request, response) => {
                 response.status(404).end()
             }
         })
-        .catch(error => next(error))
 })
 
 
@@ -50,6 +49,26 @@ usersRouter.post('/', async (request, response) => {
     response.status(201).json(savedUser)
 
 })
+
+usersRouter.put('/:id', async (request, response) => {
+    const body = request.body
+
+    const user = {
+        username: body.username,
+        name: body.name,
+        surname: body.surname,
+        phone: body.phone,
+        sex: body.sex,
+        churchStatus: body.churchStatus,
+        status: body.status
+    }
+
+    User.findByIdAndUpdate(request.params.id, user, { new: true })
+        .then(updatedBlogs => {
+            response.json(updatedBlogs)
+        })
+})
+
 
 module.exports = usersRouter
 
