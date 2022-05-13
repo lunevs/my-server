@@ -1,21 +1,22 @@
 const eventsRouter = require('express').Router()
 const Event = require('../models/event')
 
-eventsRouter.get('/', (request, response) => {
-    Event.find({}).then(e => {
-        response.json(e)
-    })
+eventsRouter.get('/', async (request, response) => {
+    const e = await Event
+        .find({})
+        .populate('location', {name: 1, description: 1})
+    response.json(e)
 })
 
-eventsRouter.get('/:id', (request, response) => {
-    Event.findById(request.params.id)
-        .then(e => {
-            if (e) {
-                response.json(e)
-            } else {
-                response.status(404).end()
-            }
-        })
+eventsRouter.get('/:id', async (request, response) => {
+    const e = await Event
+        .findById(request.params.id)
+        .populate('location', {name: 1, description: 1})
+    if (e) {
+        response.json(e)
+    } else {
+        response.status(404).end()
+    }
 })
 
 eventsRouter.post('/', async (request, response) => {
@@ -26,7 +27,7 @@ eventsRouter.post('/', async (request, response) => {
         status: body.status,
         startDate: new Date(body.startDate),
         endDate: new Date(body.endDate),
-        isRegistrationOpen: true,
+        isRegistrationOpen: body.isRegistrationOpen,
         basePrice: body.basePrice,
         title: body.title,
         location: body.locationId

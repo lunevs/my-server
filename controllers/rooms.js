@@ -2,7 +2,9 @@ const roomsRouter = require('express').Router()
 const Room = require('../models/room')
 
 roomsRouter.get('/', async (request, response) => {
-    const item = Room.find({})
+    const item = await Room
+        .find({})
+        .populate('location', {name: 1, description: 1})
     response.json(item)
 })
 
@@ -20,9 +22,10 @@ roomsRouter.post('/', async (request, response) => {
     console.log('POST event request, body:', body)
 
     const item = new Room({
-        name: body.name,
+        roomName: body.roomName,
         availableBed: body.availableBed,
         isMan: body.isMan,
+        roomCode: body.roomCode,
         location: body.locationId
     })
     console.log(item)
@@ -35,9 +38,10 @@ roomsRouter.put('/:id', async (request, response) => {
     console.log('UPDATE event request, body+id:', body, request.params.id)
 
     const item = {
-        name: body.name,
+        roomName: body.roomName,
         availableBed: body.availableBed,
         isMan: body.isMan,
+        roomCode: body.roomCode,
         location: body.locationId
     }
     const updatedRoom = await Event.findByIdAndUpdate(request.params.id, item, {new: true})
