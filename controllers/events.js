@@ -6,7 +6,7 @@ eventsRouter.get('/', (request, response) => {
 })
 
 eventsRouter.get('/:id', (request, response) => {
-    return response.json(eventsList.filter(el => el.id === request.params.id))
+    return response.json(eventsList.find(el => el.id.toString() === request.params.id))
 })
 
 eventsRouter.post('/', (request, response) => {
