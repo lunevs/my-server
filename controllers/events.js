@@ -1,26 +1,57 @@
 const eventsRouter = require('express').Router()
-const { eventsList, placesList } = require('../utils/event_helper')
+const Event = require('../models/event')
 
 eventsRouter.get('/', (request, response) => {
-    return response.json(eventsList)
+    Event.find({}).then(e => {
+        response.json(e)
+    })
 })
 
 eventsRouter.get('/:id', (request, response) => {
-    return response.json(eventsList.find(el => el.id.toString() === request.params.id))
+    Event.findById(request.params.id)
+        .then(e => {
+            if (e) {
+                response.json(e)
+            } else {
+                response.status(404).end()
+            }
+        })
 })
 
-eventsRouter.post('/', (request, response) => {
+eventsRouter.post('/', async (request, response) => {
     const body = request.body
     console.log('POST event request, body:', body)
+
+    const e = new Event({
+        status: body.status,
+        startDate: new Date(body.startDate),
+        endDate: new Date(body.endDate),
+        isRegistrationOpen: true,
+        basePrice: body.basePrice,
+        title: body.title,
+        location: body.locationId
+    })
+    console.log(e)
+    const savedEvent = await e.save()
+    response.status(201).json(savedEvent)
 })
 
-eventsRouter.delete('/:id', (request, response) => {
-    console.log('DELETE event request, id:', request.params.id)
-})
-
-eventsRouter.put('/:id', (request, response) => {
+eventsRouter.put('/:id', async (request, response) => {
     const body = request.body
     console.log('UPDATE event request, body+id:', body, request.params.id)
+
+    const e = {
+        status: body.status,
+        startDate: new Date(body.startDate),
+        endDate: new Date(body.endDate),
+        isRegistrationOpen: body.isRegistrationOpen,
+        basePrice: body.basePrice,
+        title: body.title,
+        location: body.locationId
+    }
+    const updatedEvent = await Event.findByIdAndUpdate(request.params.id, e, {new: true})
+    response.json(updatedEvent)
+
 })
 
 module.exports = eventsRouter
